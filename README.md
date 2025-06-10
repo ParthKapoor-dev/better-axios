@@ -79,7 +79,7 @@ api.get("/users").then((res) => {
 ## 📄 Full Documentation
 
 > 👉 **Explore the full docs here:**
-> **[https://better-axios.vercel.app](https://better-axios.vercel.app)**
+> **[https://better-axios.vercel.app](https://better-axios.parthkapoor.me)**
 
 * Getting Started
 * Auth Token Management
@@ -111,20 +111,3 @@ npm run test
 ## 📄 License
 
 MIT License © [Parth Kapoor](https://github.com/parthkapoor-dev)
-
-```
-
----
-
-### 📌 Notes:
-- Replace the banner image URL `https://your-image-host.com/better-axios-banner.png` with the actual hosted image (e.g., via ImageKit or GitHub CDN).
-- You can also add a Fumadocs badge later if you like:
-  _"Built with Fumadocs"_ → small logo/link in footer of site or readme.
-
-Let me know if you'd like:
-- A shorter version for GitHub social preview
-- GitHub Actions badge (CI, build, etc.)
-- Contribution guidelines or CODE_OF_CONDUCT.md
-
-Happy shipping 🚀
-```
