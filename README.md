@@ -1,318 +1,130 @@
-# Axios API Wrapper
+<!-- Banner Image -->
+<p align="center">
+  <img src="assets/better-axios.png" alt="better-axios banner" width="100%" />
+</p>
 
-A powerful TypeScript axios wrapper that eliminates repetitive API call patterns, provides centralized error handling, and simplifies authentication management.
+<br />
 
-## 🚀 Features
+<h1 align="center">⚡️ better-axios</h1>
 
-- **Zero Overhead**: No performance impact on your API calls
-- **Centralized Error Handling**: Handle errors globally or per request
-- **Automatic Authentication**: Built-in auth token management
-- **Type Safety**: Full TypeScript support with generics
-- **Service Pattern**: Organized API calls with base service class
-- **Multiple Clients**: Support for different backend services
-- **Custom Interceptors**: Request/response interceptors support
-- **CLI Tool**: Generate boilerplate code quickly
+<p align="center">
+  A modern, typed wrapper around Axios — with clean APIs, built-in token management, interceptors, and smart global handlers.
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/@parthkapoor-dev/better-axios">
+    <img src="https://img.shields.io/npm/v/@parthkapoor-dev/better-axios?color=%2300b894&style=flat-square" alt="npm version" />
+  </a>
+  <a href="https://www.npmjs.com/package/@parthkapoor-dev/better-axios">
+    <img src="https://img.shields.io/npm/dt/@parthkapoor-dev/better-axios?color=%236c5ce7&style=flat-square" alt="npm downloads" />
+  </a>
+  <a href="https://github.com/parthkapoor-dev/better-axios">
+    <img src="https://img.shields.io/github/stars/parthkapoor-dev/better-axios?style=flat-square" alt="GitHub stars" />
+  </a>
+</p>
+
+---
+
+## 🚀 Why better-axios?
+
+> Say goodbye to repetitive axios setup in every project.
+> `better-axios` helps you build scalable APIs faster with features like:
+
+- ✅ Global and custom error/success handlers
+- ✅ Token-based auth with automatic header injection
+- ✅ Type-safe responses with custom error types
+- ✅ Request/response interceptors
+- ✅ Easy-to-extend and override
+- ✅ Built-in support for UI feedback patterns
+
+---
 
 ## 📦 Installation
 
 ```bash
-npm install axios-api-wrapper-cli
+npm install @parthkapoor-dev/better-axios
 # or
-yarn add axios-api-wrapper-cli
-```
-
-## 🛠️ CLI Usage
-
-### Initialize a new project
-```bash
-npx better-axios init
-# or
-npx better-axios init --name my-project --examples --framework react
-```
-
-### Generate service files
-```bash
-# Generate a new service
-npx better-axios generate service --name user --path /users
-
-# Generate a new API client
-npx better-axios generate client --name payment
-
-# Generate configuration file
-npx better-axios generate config
-```
-
-## 💻 Quick Start
-
-### 1. Basic Setup
-
-```typescript
-import { AxiosApi } from 'axios-api-wrapper-cli';
-
-const apiClient = new AxiosApi({
-  baseURL: 'https://api.example.com',
-  globalErrorHandler: (error) => {
-    console.error('API Error:', error.message);
-    // Show toast notification, etc.
-  }
-});
-```
-
-### 2. Create a Service
-
-```typescript
-import { ApiService } from 'axios-api-wrapper-cli';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-
-class UserService extends ApiService {
-  constructor(api: AxiosApi) {
-    super(api, '/users');
-  }
-
-  async getAllUsers(): Promise<ApiResponse<User[]>> {
-    return this.get<User[]>('');
-  }
-
-  async getUserById(id: number): Promise<ApiResponse<User>> {
-    return this.get<User>(`/${id}`);
-  }
-
-  async createUser(userData: Partial<User>): Promise<ApiResponse<User>> {
-    return this.post<User>('', userData);
-  }
-}
-
-const userService = new UserService(apiClient);
-```
-
-### 3. Use in Your Application
-
-```typescript
-// Simple usage
-async function loadUsers() {
-  try {
-    const response = await userService.getAllUsers();
-    if (response.success) {
-      return response.data; // User[]
-    }
-  } catch (error) {
-    // Error already handled by global handler
-    return [];
-  }
-}
-
-// With authentication
-apiClient.setAuthToken('your-jwt-token');
-await userService.createUser({ name: 'John', email: 'john@example.com' });
-```
-
-## 🔧 Configuration Options
-
-```typescript
-const apiClient = new AxiosApi({
-  baseURL: 'https://api.example.com',
-  timeout: 15000,
-  defaultHeaders: {
-    'Content-Type': 'application/json',
-  },
-  authTokenKey: 'Authorization', // Header key for auth token
-  authTokenPrefix: 'Bearer ', // Token prefix
-  globalErrorHandler: (error: ApiError) => {
-    // Handle all errors globally
-    switch (error.statusCode) {
-      case 401:
-        // Redirect to login
-        break;
-      case 403:
-        // Show permission error
-        break;
-      default:
-        // Show generic error
-    }
-  },
-  globalSuccessHandler: (response: ApiResponse) => {
-    // Optional global success handling
-    console.log('Request successful');
-  },
-  requestInterceptor: (config) => {
-    // Modify requests before sending
-    config.headers['X-Custom-Header'] = 'value';
-    return config;
-  },
-  responseInterceptor: (response) => {
-    // Process responses before handling
-    return response;
-  }
-});
-```
-
-## 🔐 Authentication
-
-```typescript
-// Set auth token (automatically added to all requests)
-apiClient.setAuthToken('your-jwt-token');
-
-// Remove auth token
-apiClient.removeAuthToken();
-
-// Skip auth for specific requests
-await apiClient.get('/public-endpoint', { useAuth: false });
-```
-
-## 🎯 Advanced Usage
-
-### Custom Error Handling per Request
-
-```typescript
-await userService.deleteUser(123, {
-  customErrorHandler: (error) => {
-    if (error.statusCode === 403) {
-      alert('Permission denied');
-    } else {
-      alert('Delete failed');
-    }
-  },
-  customSuccessHandler: () => {
-    alert('User deleted successfully');
-  }
-});
-```
-
-### Multiple API Clients
-
-```typescript
-const mainApiClient = new AxiosApi({
-  baseURL: 'https://api.example.com',
-  globalErrorHandler: handleMainApiError
-});
-
-const paymentApiClient = new AxiosApi({
-  baseURL: 'https://payments.example.com',
-  globalErrorHandler: handlePaymentApiError
-});
-
-const userService = new UserService(mainApiClient);
-const paymentService = new PaymentService(paymentApiClient);
-```
-
-### Direct API Calls
-
-```typescript
-// Without services
-const response = await apiClient.get<User[]>('/users');
-const newUser = await apiClient.post<User>('/users', userData);
-const updatedUser = await apiClient.put<User>(`/users/${id}`, updateData);
-await apiClient.delete(`/users/${id}`);
-```
-
-## 📚 API Reference
-
-### AxiosApi Class
-
-#### Constructor Options
-- `baseURL`: Base URL for all requests
-- `timeout`: Request timeout in milliseconds
-- `defaultHeaders`: Default headers for all requests
-- `authTokenKey`: Header key for authentication token
-- `authTokenPrefix`: Prefix for authentication token
-- `globalErrorHandler`: Global error handling function
-- `globalSuccessHandler`: Global success handling function
-- `requestInterceptor`: Custom request interceptor
-- `responseInterceptor`: Custom response interceptor
-
-#### Methods
-- `get<T>(url, config?)`: GET request
-- `post<T>(url, data?, config?)`: POST request
-- `put<T>(url, data?, config?)`: PUT request
-- `patch<T>(url, data?, config?)`: PATCH request
-- `delete<T>(url, config?)`: DELETE request
-- `setAuthToken(token)`: Set authentication token
-- `removeAuthToken()`: Remove authentication token
-- `setDefaultHeader(key, value)`: Set default header
-- `removeDefaultHeader(key)`: Remove default header
-
-### ApiService Class
-
-Base class for creating organized API services.
-
-#### Constructor
-```typescript
-constructor(api: AxiosApi, basePath: string)
-```
-
-#### Protected Methods
-- `get<T>(endpoint, config?)`: GET request relative to basePath
-- `post<T>(endpoint, data?, config?)`: POST request relative to basePath
-- `put<T>(endpoint, data?, config?)`: PUT request relative to basePath
-- `patch<T>(endpoint, data?, config?)`: PATCH request relative to basePath
-- `delete<T>(endpoint, config?)`: DELETE request relative to basePath
-- `buildUrl(endpoint)`: Build full URL from endpoint
-
-### Request Configuration
-
-```typescript
-interface RequestConfig {
-  useAuth?: boolean; // Include auth token (default: true)
-  customErrorHandler?: (error: ApiError) => void;
-  customSuccessHandler?: (response: ApiResponse) => void;
-  skipGlobalHandlers?: boolean; // Skip global handlers
-  // ... other axios config options
-}
-```
-
-### Response Types
-
-```typescript
-interface ApiResponse<T = any> {
-  data: T;
-  success: boolean;
-  message?: string;
-  statusCode: number;
-}
-
-interface ApiError {
-  message: string;
-  statusCode: number;
-  originalError: any;
-}
-```
-
-## 🔍 Examples
-
-Check out the `/examples` directory in your generated project for complete usage examples including:
-
-- React integration
-- Vue integration
-- Node.js server usage
-- Authentication flows
-- Error handling patterns
-- Multiple API clients
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙋‍♂️ Support
-
-If you have any questions or need help, please:
-
-1. Check the [documentation](https://github.com/yourusername/axios-api-wrapper-cli)
-2. Open an [issue](https://github.com/yourusername/axios-api-wrapper-cli/issues)
-3. Start a [discussion](https://github.com/yourusername/axios-api-wrapper-cli/discussions)
+yarn add @parthkapoor-dev/better-axios
+````
 
 ---
 
-Made with ❤️ by [Your Name]
+## ✨ Features
+
+* 📚 Fully typed API with TypeScript
+* 🔐 Token auth with prefix config (`Bearer`, etc.)
+* 🔁 Interceptors (great for refresh tokens)
+* ⚠️ Global & local success/error handlers
+* 🔧 Easy to use `setDefaultHeader()`, `removeAuthToken()`, etc.
+* 📦 Minimal bundle, no runtime dependencies except `axios`
+
+---
+
+## 🧪 Basic Usage
+
+```ts
+import { AxiosApi } from "@parthkapoor-dev/better-axios"
+
+const api = new AxiosApi({
+  baseURL: "https://api.example.com",
+})
+
+api.get("/users").then((res) => {
+  console.log(res.data)
+})
+```
+
+---
+
+## 📄 Full Documentation
+
+> 👉 **Explore the full docs here:**
+> **[https://better-axios.vercel.app](https://better-axios.vercel.app)**
+
+* Getting Started
+* Auth Token Management
+* Interceptors (Request / Response)
+* Global vs Custom Handlers
+* Error Handling Strategies
+* Recipes & Use Cases
+
+---
+
+## 🛠 Contributing
+
+Found a bug or have a feature request?
+We welcome contributions!
+
+```bash
+# clone the repo
+git clone https://github.com/parthkapoor-dev/better-axios.git
+
+# install deps
+npm install
+
+# run tests
+npm run test
+```
+
+---
+
+## 📄 License
+
+MIT License © [Parth Kapoor](https://github.com/parthkapoor-dev)
+
+```
+
+---
+
+### 📌 Notes:
+- Replace the banner image URL `https://your-image-host.com/better-axios-banner.png` with the actual hosted image (e.g., via ImageKit or GitHub CDN).
+- You can also add a Fumadocs badge later if you like:
+  _"Built with Fumadocs"_ → small logo/link in footer of site or readme.
+
+Let me know if you'd like:
+- A shorter version for GitHub social preview
+- GitHub Actions badge (CI, build, etc.)
+- Contribution guidelines or CODE_OF_CONDUCT.md
+
+Happy shipping 🚀
+```
