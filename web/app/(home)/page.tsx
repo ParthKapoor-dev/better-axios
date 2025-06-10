@@ -93,9 +93,15 @@ export default function HeroSection() {
                 <Button
                   variant="outline"
                   onClick={handleCopy}
-                  className="group mx-auto flex w-fit items-center gap-3 rounded-full bg-muted px-5 py-2 font-mono text-sm shadow-md dark:bg-zinc-900"
+                  className="group mx-auto flex w-fit items-center gap-3 rounded-full bg-muted px-5 py-6 md:py-2 font-mono text-sm shadow-md dark:bg-zinc-900"
                 >
-                  <span>npm install @parthkapoor-dev/better-axios</span>
+                  <span>
+                    npm install
+                    <span className="md:hidden">
+                      <br />
+                    </span>
+                    @parthkapoor-dev/better-axios
+                  </span>
                   <span className="ml-2 transition-all group-hover:scale-110">
                     {copied ? (
                       <Check className="h-4 w-4 text-green-500" />
@@ -109,7 +115,7 @@ export default function HeroSection() {
                   preset="fade-in-blur"
                   speedSegment={0.3}
                   as="h1"
-                  className="mt-8 text-balance text-6xl md:text-7xl lg:mt-16 xl:text-[5.25rem]"
+                  className="mt-8 text-balance text-4xl md:text-7xl lg:mt-16 xl:text-[5.25rem]"
                 >
                   Type-Safe Axios, Made Smarter
                 </TextEffect>
@@ -119,7 +125,7 @@ export default function HeroSection() {
                   speedSegment={0.3}
                   delay={0.5}
                   as="p"
-                  className="mx-auto mt-8 max-w-3xl text-balance text-lg"
+                  className="mx-auto mt-8 max-w-3xl text-balance text-lg max-md:text-sm"
                 >
                   Better Axios is a lightweight, extensible wrapper around
                   Axios—offering full type safety, token management,
