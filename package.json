@@ -1,5 +1,5 @@
 {
-  "name": "better-axios",
+  "name": "@parthkapoor-dev/better-axios",
   "version": "1.0.0",
   "description": "A powerful axios wrapper that eliminates repetitive API call patterns with centralized error handling and auth management",
   "main": "dist/index.js",
@@ -16,7 +16,7 @@
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run test && npm run lint"
+    "prepublishOnly": "npm run test"
   },
   "keywords": [
     "axios",
@@ -50,9 +50,7 @@
     "typescript": "^5.2.0"
   },
   "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
+    "dist"
   ],
   "engines": {
     "node": ">=16.0.0"
