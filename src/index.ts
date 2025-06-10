@@ -1,7 +1,6 @@
 // Main entry point for the axios-wrapper library
 export {
   AxiosApi,
-  ApiService,
   type AxiosApiConfig,
   type ApiResponse,
   type ApiError,
