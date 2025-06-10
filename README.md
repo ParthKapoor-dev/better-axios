@@ -79,7 +79,7 @@ api.get("/users").then((res) => {
 ## 📄 Full Documentation
 
 > 👉 **Explore the full docs here:**
-> **[https://better-axios.vercel.app](https://better-axios.parthkapoor.me)**
+> **[https://better-axios.parthkapoor.me](https://better-axios.parthkapoor.me)**
 
 * Getting Started
 * Auth Token Management
