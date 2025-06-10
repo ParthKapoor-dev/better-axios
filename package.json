@@ -1,0 +1,67 @@
+{
+  "name": "better-axios",
+  "version": "1.0.0",
+  "description": "A powerful axios wrapper that eliminates repetitive API call patterns with centralized error handling and auth management",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "axios-wrapper": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/cli.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run test && npm run lint"
+  },
+  "keywords": [
+    "axios",
+    "api",
+    "wrapper",
+    "http",
+    "client",
+    "typescript",
+    "rest",
+    "error-handling",
+    "authentication"
+  ],
+  "author": "Parth Kapoor",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "inquirer": "^8.2.6"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.0",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0",
+    "jest": "^29.6.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.2.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parthkapoor-dev/better-axios.git"
+  },
+  "bugs": {
+    "url": "https://github.com/parthkapoor-dev/better-axios/issues"
+  },
+  "homepage": "https://github.com/parthkapoor-dev/better-axios#readme"
+}
