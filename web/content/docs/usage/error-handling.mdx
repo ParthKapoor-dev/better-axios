@@ -1,0 +1,116 @@
+---
+title: Error Handling Strategies
+description: Learn how to handle errors using ApiError and build resilient UI.
+---
+
+# ❌ Error Handling Strategies
+
+`better-axios` provides a structured way to handle errors via the `ApiError` object. It standardizes error handling across your app, making it easier to deal with failures gracefully.
+
+---
+
+## 🧱 What is `ApiError`?
+
+Every failed request throws a standardized `ApiError` object with:
+
+```ts
+interface ApiError {
+  message: string;        // Human-readable message
+  statusCode: number;     // HTTP status code (e.g. 401, 500)
+  originalError: any;     // Full AxiosError or unknown error
+}
+````
+
+You can use this format in global/custom error handlers or inside try/catch blocks.
+
+---
+
+## 🧪 Basic Usage
+
+```ts
+try {
+  await api.get("/profile");
+} catch (error) {
+  const err = error as ApiError;
+  console.error("Error:", err.message);
+  console.log("Status:", err.statusCode);
+}
+```
+
+This works for both backend-originated errors and unexpected client-side ones.
+
+---
+
+## 🛠️ Real-World API Error Shapes
+
+`better-axios` tries to extract the most useful info from the backend’s error shape:
+
+```json
+{
+  "success": false,
+  "message": "Invalid credentials",
+  "error": "Unauthorized",
+  "status": 401
+}
+```
+
+If `message` or `status` fields exist, they are used to populate the `ApiError`. If not, it falls back to Axios’s defaults.
+
+---
+
+## 🔁 Retry Logic Example
+
+You can use `statusCode` to retry on specific errors:
+
+```ts
+const MAX_RETRIES = 3;
+
+async function fetchWithRetry(url: string) {
+  let attempts = 0;
+
+  while (attempts < MAX_RETRIES) {
+    try {
+      return await api.get(url);
+    } catch (error) {
+      const err = error as ApiError;
+      if (err.statusCode >= 500) {
+        attempts++;
+        await new Promise((r) => setTimeout(r, 500)); // Wait before retry
+      } else {
+        throw err;
+      }
+    }
+  }
+
+  throw new Error("Max retries reached.");
+}
+```
+
+---
+
+## 🧑‍💻 UI Fallbacks
+
+Use the error message for UI feedback:
+
+```ts
+try {
+  await api.post("/login", { data: creds });
+} catch (error) {
+  const err = error as ApiError;
+  toast.error(err.message || "Login failed");
+}
+```
+
+You can even show retry buttons or display status codes for debugging.
+
+---
+
+## 📌 Summary
+
+| Error Type     | How to Handle                          |
+| -------------- | -------------------------------------- |
+| Network issues | Catch and show fallback UI             |
+| 4xx errors     | Use `message` to display user feedback |
+| 5xx errors     | Retry logic or report to monitoring    |
+
+---

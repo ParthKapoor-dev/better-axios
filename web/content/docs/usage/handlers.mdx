@@ -1,0 +1,101 @@
+---
+title: Success & Error Handlers
+description: Handle API success and error globally or per request.
+---
+
+# ✅ Success & Error Handlers
+
+`better-axios` allows you to handle API responses with:
+
+- **Global Handlers** – applied to all requests unless skipped.
+- **Custom Handlers** – defined per request.
+- **skipGlobalHandlers** – disables global handlers for specific requests.
+
+---
+
+## 🌍 Global Handlers (set once)
+
+Pass them in the `AxiosApi` constructor:
+
+```ts
+const api = new AxiosApi({
+  baseURL: "https://api.example.com",
+  globalSuccessHandler: (res) => {
+    console.log("✅ Global Success:", res.message);
+  },
+  globalErrorHandler: (err) => {
+    console.error("❌ Global Error:", err.message);
+  },
+});
+````
+
+These are automatically triggered after every successful or failed request unless explicitly skipped.
+
+---
+
+## 🧪 Custom Handlers (per-request)
+
+You can override global handlers on specific calls:
+
+```ts
+await api.get("/user", {
+  customSuccessHandler: (res) => {
+    console.log("🎉 Custom success:", res.data);
+  },
+  customErrorHandler: (err) => {
+    console.error("⚠️ Custom error:", err.message);
+  },
+});
+```
+
+---
+
+## 🚫 Skip Global Handlers
+
+Disable global handlers for edge cases or internal logic:
+
+```ts
+await api.post("/admin/task", {
+  data: { name: "Cleanup" },
+  skipGlobalHandlers: true,
+});
+```
+
+Only custom handlers will be triggered if provided. Otherwise, the error will bubble up.
+
+---
+
+## 🧑‍💻 Practical Example: UI Feedback
+
+Use handlers to show UI toasts:
+
+```ts
+import toast from "react-hot-toast";
+
+const api = new AxiosApi({
+  baseURL: "/api",
+  globalSuccessHandler: (res) => {
+    toast.success(res.message || "Success!");
+  },
+  globalErrorHandler: (err) => {
+    toast.error(err.message || "Something went wrong");
+  },
+});
+
+// Login request using default global handlers
+await api.post("/login", {
+  data: { username, password },
+});
+```
+
+---
+
+## 🧠 When to Use What
+
+| Scenario                   | Use                        |
+| -------------------------- | -------------------------- |
+| App-wide notifications     | Global handlers            |
+| Request-specific messaging | Custom handlers            |
+| Silent background requests | `skipGlobalHandlers: true` |
+
+---

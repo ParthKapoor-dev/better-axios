@@ -1,0 +1,93 @@
+---
+title: Auth & Tokens
+description: Learn how to manage authentication tokens with better-axios.
+---
+
+# 🔐 Auth & Tokens
+
+`better-axios` provides built-in methods to handle authentication tokens in a clean and consistent way.
+
+---
+
+## 📥 Setting the Auth Token
+
+Use `setAuthToken()` to set the token after a user logs in:
+
+```ts
+api.setAuthToken("your-jwt-token-here");
+````
+
+By default, this token is added as a `Bearer` token in the `Authorization` header of all outgoing requests.
+
+```http
+Authorization: Bearer your-jwt-token-here
+```
+
+---
+
+## 📤 Removing the Token
+
+When a user logs out, remove the token using:
+
+```ts
+api.removeAuthToken();
+```
+
+This stops the token from being sent with future requests.
+
+---
+
+## 🧪 Example: Login Flow
+
+Here's a complete example of logging in and using the token:
+
+```ts
+// 1. Send login credentials
+const loginRes = await api.post<{ token: string }>("/auth/login", {
+  email: "john@example.com",
+  password: "secret123",
+});
+
+if (loginRes.success) {
+  // 2. Store token
+  api.setAuthToken(loginRes.data.token);
+
+  // 3. Authenticated request
+  const profile = await api.get("/me");
+  console.log(profile.data);
+}
+```
+
+---
+
+## 🏷️ Customizing Header & Prefix
+
+You can change the token key or prefix globally:
+
+```ts
+const api = new AxiosApi({
+  baseURL: "https://api.example.com",
+  authTokenKey: "X-Token",
+  authTokenPrefix: "", // no prefix
+});
+```
+
+Now the request header will be:
+
+```http
+X-Token: your-token
+```
+
+---
+
+## ⚠️ Disabling Token Per Request
+
+To skip adding the token for a specific request:
+
+```ts
+const response = await api.get("/public-endpoint", {
+  useAuth: false,
+});
+```
+
+---

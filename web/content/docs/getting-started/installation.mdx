@@ -1,0 +1,50 @@
+---
+title: Installation
+description: How to install better-axios and start using it in your project.
+---
+
+# 📦 Installation
+
+You can install `better-axios` via npm or yarn:
+
+```bash
+npm install @parthkapoor/better-axios
+# or
+yarn add @parthkapoor/better-axios
+````
+
+---
+
+## ✅ Peer Dependencies
+
+Make sure you also have:
+
+* `axios` v1.x
+* `typescript` (if you're using TS)
+
+---
+
+## 🧪 Minimal Setup
+
+Here’s how to set up the library in your project:
+
+```ts
+import { AxiosApi } from "@parthkapoor/better-axios";
+
+const api = new AxiosApi({
+  baseURL: "https://api.example.com",
+  tokenPrefix: "Bearer", // optional
+});
+```
+
+Now you can use methods like `get`, `post`, `put`, `delete` with type-safe responses.
+
+---
+
+## 🛠️ Supported Environments
+
+* ✅ React & Next.js (Client-side)
+* ✅ Node.js / Express (Backend)
+* ✅ Vite / Vanilla JS projects with TypeScript
+
+---

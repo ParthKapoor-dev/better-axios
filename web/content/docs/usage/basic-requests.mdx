@@ -1,0 +1,112 @@
+---
+title: Basic Requests
+description: Learn how to make GET, POST, PUT, PATCH, and DELETE requests with better-axios.
+---
+
+# 📡 Basic API Requests
+
+Once your `AxiosApi` instance is initialized, making API requests is simple and type-safe.
+
+```ts
+import { AxiosApi } from "@parthkapoor/better-axios";
+
+const api = new AxiosApi({ baseURL: "https://api.example.com" });
+```
+
+---
+
+## 🔍 GET Request
+
+Fetch data from a REST endpoint:
+
+```ts
+const response = await api.get("/users");
+
+if (response.success) {
+  console.log(response.data); // array of users
+} else {
+  console.error(response.message); // error message
+}
+```
+
+---
+
+## 📤 POST Request
+
+Send data to create a resource:
+
+```ts
+const response = await api.post("/users", {
+  name: "John Doe",
+  email: "john@example.com"
+});
+```
+
+---
+
+## ✏️ PUT Request
+
+Update an existing resource:
+
+```ts
+const response = await api.put("/users/1", {
+  name: "Jane Doe"
+});
+```
+
+---
+
+## 🧩 PATCH Request
+
+Partially update a resource:
+
+```ts
+const response = await api.patch("/users/1", {
+  status: "active"
+});
+```
+
+---
+
+## ❌ DELETE Request
+
+Remove a resource:
+
+```ts
+const response = await api.delete("/users/1");
+```
+
+---
+
+## ✅ Uniform Response Format
+
+Every method returns an `ApiResponse` object:
+
+```ts
+interface ApiResponse<T = any> {
+  data: T;
+  success: boolean;
+  message?: string;
+  statusCode: number;
+}
+```
+
+So you can always check `response.success` before using `response.data`.
+
+---
+
+## 📌 Example: With Type Safety
+
+You can optionally define the expected response type:
+
+```ts
+type User = { id: number; name: string };
+
+const response = await api.get<User>("/users/1");
+
+if (response.success) {
+  console.log(response.data.id); // type-safe access
+}
+```
+
+---

@@ -1,13 +1,44 @@
 ---
-title: Hello World
-description: Your first document
+title: Overview
+description: Introduction to better-axios, its purpose, and its key features.
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+# 👋 Welcome to `better-axios`
 
-## What is Next?
+`better-axios` is a lightweight and powerful wrapper around [Axios](https://axios-http.com/) that helps you write cleaner, more consistent API calls across your frontend or backend projects.
 
-<Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.vercel.app" />
-</Cards>
+### 🚀 Why use better-axios?
+
+- ✅ Unified request/response types (`ApiResponse`, `ApiError`)
+- 🔐 Easy token management (`setAuthToken`, `removeAuthToken`)
+- ⚙️ Global success & error handlers
+- 🧩 Easily extendable Axios instance
+- 📦 Works with React, Next.js, Node.js, etc.
+
+### 🎯 Goal
+
+The goal is to **abstract away repetitive axios boilerplate**, make it **type-safe**, and provide a plug-and-play interface for building API layers in TypeScript projects.
+
+---
+
+## ✨ Example Use
+
+```ts
+import { AxiosApi } from "better-axios";
+
+const api = new AxiosApi({ baseURL: "https://api.example.com" });
+
+const result = await api.get("/users");
+
+if (result.success) {
+  console.log(result.data); // ✅ success
+} else {
+  console.error(result.error.message); // ❌ error
+}
+
+```
+
+This is just scratching the surface — check the Usage section for more.
+
+
+---

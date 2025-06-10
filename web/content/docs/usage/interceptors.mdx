@@ -1,0 +1,90 @@
+---
+title: Interceptors
+description: Add custom request and response interceptors to better-axios.
+---
+
+# 🔄 Interceptors
+
+`better-axios` supports custom **request** and **response** interceptors, similar to native Axios. You can use them to modify headers, handle tokens, log responses, or implement features like token refresh.
+
+---
+
+## 🚀 Add Custom Interceptors
+
+You can pass custom interceptors during initialization using `requestInterceptor` and `responseInterceptor`.
+
+```ts
+const api = new AxiosApi({
+  baseURL: "https://api.example.com",
+  requestInterceptor: async (config) => {
+    // Add a custom header
+    config.headers["X-App-Version"] = "1.0.0";
+    return config;
+  },
+  responseInterceptor: async (response) => {
+    // Log response or modify it
+    console.log("Response received:", response.status);
+    return response;
+  },
+});
+````
+
+---
+
+## 🔁 Use Case: Refresh Expired Token
+
+Here's a simplified example of intercepting a 401 error and retrying the request after refreshing the token.
+
+```ts
+const api = new AxiosApi({
+  baseURL: "https://api.example.com",
+  responseInterceptor: async (response) => {
+    return response;
+  },
+});
+
+// Add interceptor manually to retry requests after token refresh
+api.getAxiosInstance().interceptors.response.use(
+  (res) => res,
+  async (error) => {
+    const originalRequest = error.config;
+
+    // Check for 401 and avoid infinite loop
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      // Assume we get a new token from refresh endpoint
+      const res = await api.post<{ token: string }>("/auth/refresh");
+
+      if (res.success) {
+        api.setAuthToken(res.data.token);
+
+        // Retry original request
+        originalRequest.headers["Authorization"] = `Bearer ${res.data.token}`;
+        return api.getAxiosInstance().request(originalRequest);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+```
+
+---
+
+## ✅ Why Use Interceptors?
+
+* 🔐 Add or modify headers dynamically
+* 🔄 Handle token refresh or session expiration
+* 🐞 Centralized logging/debugging
+* 🧹 Cleanly separate logic without modifying each request
+
+---
+
+## 🧠 Best Practices
+
+* Keep interceptors **pure** and **async-safe**
+* Always handle **failures** gracefully (especially inside `responseInterceptor`)
+* Avoid infinite retry loops—track retries via flags like `_retry`
+
+---
